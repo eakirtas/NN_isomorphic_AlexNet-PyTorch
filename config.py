@@ -72,7 +72,7 @@ if mode == "train":
 
 if mode == "test":
     # Test data address
-    test_image_dir = "./data/ILSVRC/Data/CLS-LOC/test"
+    test_image_dir = "./data/ILSVRC/Data/CLS-LOC/val"
 
     # Test dataloader parameters
     image_size = 224

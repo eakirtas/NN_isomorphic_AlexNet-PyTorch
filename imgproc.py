@@ -202,7 +202,7 @@ def random_rotate(
 
 
 def random_horizontally_flip(
-        images: ndarray | Tensor | list[ndarray] | list[Tensor],
+        images: ndarray ,
         p: float = 0.5
 ) -> [ndarray] or [Tensor] or [list[ndarray]] or [list[Tensor]]:
     # Get horizontal flip probability
@@ -228,7 +228,7 @@ def random_horizontally_flip(
 
 
 def random_vertically_flip(
-        images: ndarray | Tensor | list[ndarray] | list[Tensor],
+        images: ndarray ,
         p: float = 0.5
 ) -> [ndarray] or [Tensor] or [list[ndarray]] or [list[Tensor]]:
     # Get vertical flip probability

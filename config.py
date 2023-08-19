@@ -30,7 +30,7 @@ model_arch_name = "alexnet"
 # Model number class
 model_num_classes = 1000
 # Current configuration parameter method
-mode = "train"
+mode = "test"
 # Experiment name, easy to save weights and log files
 exp_name = f"{model_arch_name.upper()}-ImageNet_1K"
 

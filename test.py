@@ -25,7 +25,7 @@ from utils import load_state_dict, accuracy, Summary, AverageMeter, ProgressMete
 
 
 def build_model() -> nn.Module:
-    alexnet_model = model.__dict__[config.model_arch_name](num_classes=config.model_num_classes)
+    alexnet_model = model.__dict__[config.model_arch_name](num_classes=config.model_num_classes, alpha=[2, 2, 2, 2, 2, 2, 2, 2])
     alexnet_model = alexnet_model.to(device=config.device, memory_format=torch.channels_last)
 
     return alexnet_model
@@ -53,7 +53,7 @@ def main() -> None:
     print(f"Build {config.model_arch_name.upper()} model successfully.")
 
     # Load model weights
-    alexnet_model, _, _, _, _, _ = load_state_dict(alexnet_model, config.model_weights_path)
+    alexnet_model.load_state_dict(torch.load(args.model_weights_path))
     print(f"Load {config.model_arch_name.upper()} "
           f"model weights `{os.path.abspath(config.model_weights_path)}` successfully.")
 

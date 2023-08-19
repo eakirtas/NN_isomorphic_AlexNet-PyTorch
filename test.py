@@ -27,7 +27,7 @@ import os
 from torch.utils.data import Dataset
 from PIL import Image
 import json
-from nnn.transformation import nn_transformation
+from alexnet_pytorch.nnn.transformation import nn_transformation
 
 
 import os

@@ -83,9 +83,9 @@ def build_model() -> nn.Module:
 def load_dataset() -> CUDAPrefetcher:
     val_transform = transforms.Compose([
                 transforms.Resize(256),
-                transforms.CenterCrop([self.image_size, self.image_size]),
+                transforms.CenterCrop([config.image_size, config.image_size]),
                 transforms.ConvertImageDtype(torch.float),
-               transforms.Normalize([0.<485, 0.456, 0.406], [0.229, 0.224, 0.225])
+               transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ])
 
     test_dataset = ImageNetKaggle('./data/', "val", val_transform)

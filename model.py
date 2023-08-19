@@ -13,7 +13,7 @@
 # ==============================================================================
 from typing import Any
 
-import torch
+import torch as T
 from torch import Tensor
 from torch import nn
 
@@ -79,10 +79,10 @@ class NNAlexNet(nn.Module):
 
         self.counter += 1
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: T.Tensor) -> T.Tensor:
         x = self.features(x)
         x = self.avgpool(x)
-        x = torch.flatten(x, 1)
+        x = T.flatten(x, 1)
         x = self.classifier(x)
         return x
 
@@ -127,10 +127,10 @@ class AlexNet(nn.Module):
     def get_nn_net(self):
         return NNAlexNet()
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: T.Tensor) -> T.Tensor:
         x = self.features(x)
         x = self.avgpool(x)
-        x = torch.flatten(x, 1)
+        x = T.flatten(x, 1)
         x = self.classifier(x)
         return x
 

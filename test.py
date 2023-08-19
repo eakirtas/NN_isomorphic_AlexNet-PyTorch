@@ -53,7 +53,7 @@ def main() -> None:
     print(f"Build {config.model_arch_name.upper()} model successfully.")
 
     # Load model weights
-    alexnet_model.load_state_dict(torch.load(args.model_weights_path))
+    alexnet_model.load_state_dict(torch.load(config.model_weights_path))
     print(f"Load {config.model_arch_name.upper()} "
           f"model weights `{os.path.abspath(config.model_weights_path)}` successfully.")
 

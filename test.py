@@ -27,6 +27,13 @@ from torch.utils.data import Dataset
 from PIL import Image
 import json
 
+
+
+import os
+from torch.utils.data import Dataset
+from PIL import Image
+import json
+
 class ImageNetKaggle(Dataset):
     def __init__(self, root, split, transform=None):
         self.samples = []
@@ -54,13 +61,16 @@ class ImageNetKaggle(Dataset):
                 target = self.syn_to_class[syn_id]
                 sample_path = os.path.join(samples_dir, entry)
                 self.samples.append(sample_path)
-                self.targets.append(target)    def __len__(self):
-            return len(self.samples)    def __getitem__(self, idx):
+                self.targets.append(target)
+
+        def __len__(self):
+            return len(self.samples)
+
+        def __getitem__(self, idx):
             x = Image.open(self.samples[idx]).convert("RGB")
             if self.transform:
                 x = self.transform(x)
             return x, self.targets[idx]
-
 
 def build_model() -> nn.Module:
     alexnet_model = model.__dict__[config.model_arch_name](num_classes=config.model_num_classes, alpha=[2, 2, 2, 2, 2, 2, 2, 2])

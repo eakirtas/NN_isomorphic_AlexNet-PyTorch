@@ -22,7 +22,7 @@ import config
 import model
 from dataset import CUDAPrefetcher, ImageDataset
 from utils import load_state_dict, accuracy, Summary, AverageMeter, ProgressMeter
-from torchvision import transform
+from torchvision import transforms
 import os
 from torch.utils.data import Dataset
 from PIL import Image

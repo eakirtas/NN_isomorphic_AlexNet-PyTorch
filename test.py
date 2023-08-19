@@ -37,7 +37,7 @@ import json
 
 
 def build_model() -> nn.Module:
-    alexnet_model = model.__dict__[config.model_arch_name](num_classes=config.model_num_classes, alpha=[2, 2, 2, 2, 2, 2, 2, 2])
+    alexnet_model = model.__dict__[config.model_arch_name](num_classes=config.model_num_classes, alpha=[6 for i in range(6)])
     alexnet_model = alexnet_model.to(device=config.device, memory_format=torch.channels_last)
 
     return alexnet_model

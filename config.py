@@ -37,7 +37,7 @@ exp_name = f"{model_arch_name.upper()}-ImageNet_1K"
 if mode == "train":
     # Dataset address
     train_image_dir = "./data/ImageNet_1K/ILSVRC2012_img_train"
-    valid_image_dir = "./data/ImageNet_1K/ILSVRC2012_img_val"
+    valid_image_dir = "data/ILSVRC/Data/CLS-LOC/val"
 
     image_size = 224
     batch_size = 128

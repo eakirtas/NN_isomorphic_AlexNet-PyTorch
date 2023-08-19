@@ -47,7 +47,7 @@ def choice_device(device_type: str) -> torch.device:
 
 
 def build_model(model_arch_name: str, model_num_classes: int, device: torch.device) -> [nn.Module, nn.Module]:
-    alexnet_model = model.__dict__[model_arch_name](num_classes=model_num_classes)
+    alexnet_model = model.__dict__[model_arch_name](num_classes=model_num_classes, alpha=[2, 2, 2, 2, 2, 2, 2, 2])
     alexnet_model = alexnet_model.to(device=device, memory_format=torch.channels_last)
 
     return alexnet_model

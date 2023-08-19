@@ -88,7 +88,7 @@ def main():
     print(f"Build {config.model_arch_name.upper()} model successfully.")
 
     # Load model weights
-    alexnet_model, _, _, _, _, _ = load_state_dict(alexnet_model, args.model_weights_path)
+    alexnet_model.load_state_dict(T.load(args.model_weights_path))
     print(f"Load {config.model_arch_name.upper()} "
           f"model weights `{os.path.abspath(args.model_weights_path)}` successfully.")
 

@@ -22,52 +22,119 @@ __all__ = [
     "alexnet",
 ]
 
+class NNAlexNet(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.counter = 0
+        self.lookup = [
+            [ 3, 6, 8, 10],
+            [1, 4, 5]
+        ]
 
-class AlexNet(nn.Module):
-    def __init__(self, num_classes: int = 1000) -> None:
-        super(AlexNet, self).__init__()
-
-        self.features = nn.Sequential(
-            nn.Conv2d(3, 64, (11, 11), (4, 4), (2, 2)),
-            nn.ReLU(True),
-            nn.MaxPool2d((3, 3), (2, 2)),
-
-            nn.Conv2d(64, 192, (5, 5), (1, 1), (2, 2)),
-            nn.ReLU(True),
-            nn.MaxPool2d((3, 3), (2, 2)),
-
-            nn.Conv2d(192, 384, (3, 3), (1, 1), (1, 1)),
-            nn.ReLU(True),
-            nn.Conv2d(384, 256, (3, 3), (1, 1), (1, 1)),
-            nn.ReLU(True),
-            nn.Conv2d(256, 256, (3, 3), (1, 1), (1, 1)),
-            nn.ReLU(True),
-            nn.MaxPool2d((3, 3), (2, 2)),
-        )
-
+        self.features = nn.Sequential()
+        self.features_list = [
+            None,
+            lambda: nn.ReLU(inplace=True),
+            lambda: nn.MaxPool2d(kernel_size=3, stride=2),
+            None,
+            lambda: nn.ReLU(inplace=True),
+            lambda: nn.MaxPool2d(kernel_size=3, stride=2),
+            None,
+            lambda: nn.ReLU(inplace=True),
+            None,
+            lambda: nn.ReLU(inplace=True),
+            None,
+            lambda: nn.ReLU(inplace=True),
+            lambda: nn.MaxPool2d(kernel_size=3, stride=2),
+        ]
         self.avgpool = nn.AdaptiveAvgPool2d((6, 6))
 
+        self.classifier = nn.Sequential()
+        self.classifier_list = [
+            lambda: nn.Dropout(p=dropout),
+            None,
+            lambda: nn.ReLU(inplace=True),
+            lambda: nn.Dropout(p=dropout),
+            None,
+            lambda: nn.ReLU(inplace=True),
+            None,
+        ]
+
+        self.counter = 0
+
+
+    def add_layer(self, layer):
+        if self.counter < 5:
+            i = len(self.features)
+            while self.features_list[i] is not None:
+                self.feature.append(self.feature_list[i]())
+                i+=1
+            self.features[i].append(layer)
+        else:
+            i = len(self.classifier)
+            while self.classifier_list[i] is not None:
+                self.classifier.append(self.feature_list[i]())
+                i+=1
+            self.classifier[i].append(layer)
+
+        self.counter += 1
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = self.features(x)
+        x = self.avgpool(x)
+        x = torch.flatten(x, 1)
+        x = self.classifier(x)
+        return x
+
+
+
+class AlexNet(nn.Module):
+    def __init__(self, num_classes: int = 1000, dropout: float = 0.5, alpha=None) -> None:
+        super().__init__()
+        self.features = nn.Sequential(
+            nn.Conv2d(3, 64, kernel_size=11, stride=4, padding=2),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2),
+            nn.Conv2d(64, 192, kernel_size=5, padding=2),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2),
+            nn.Conv2d(192, 384, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(384, 256, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256, 256, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2),
+        )
+        self.avgpool = nn.AdaptiveAvgPool2d((6, 6))
         self.classifier = nn.Sequential(
-            nn.Dropout(0.5),
+            nn.Dropout(p=dropout),
             nn.Linear(256 * 6 * 6, 4096),
-            nn.ReLU(True),
-            nn.Dropout(0.5),
+            nn.ReLU(inplace=True),
+            nn.Dropout(p=dropout),
             nn.Linear(4096, 4096),
-            nn.ReLU(True),
+            nn.ReLU(inplace=True),
             nn.Linear(4096, num_classes),
         )
 
-    def forward(self, x: Tensor) -> Tensor:
-        return self._forward_impl(x)
+        self.alpha = T.tensor(alpha)
 
-    # Support torch.script function
-    def _forward_impl(self, x: Tensor) -> Tensor:
-        out = self.features(x)
-        out = self.avgpool(out)
-        out = torch.flatten(out, 1)
-        out = self.classifier(out)
+        self.layers = []
+        for layer in self.children():
+            if isinstance(layer, nn.Linear) or isinstance(layer, nn.Conv2d):
+                self.layers.append(layer)
 
-        return out
+    def get_nn_net(self):
+        return NNAlexNet()
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = self.features(x)
+        x = self.avgpool(x)
+        x = torch.flatten(x, 1)
+        x = self.classifier(x)
+        return x
+
+
 
 
 def alexnet(**kwargs: Any) -> AlexNet:

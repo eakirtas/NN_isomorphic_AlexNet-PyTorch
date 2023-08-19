@@ -125,7 +125,7 @@ def center_crop(
 
 
 def random_crop(
-        images: ndarray | Tensor | list[ndarray] | list[Tensor],
+        images: ndarray,
         patch_size: int,
 ) -> [ndarray] or [Tensor] or [list[ndarray]] or [list[Tensor]]:
     if not isinstance(images, list):
@@ -164,7 +164,7 @@ def random_crop(
 
 
 def random_rotate(
-        images: ndarray | Tensor | list[ndarray] | list[Tensor],
+        images: ndarray,
         angles: list,
         center: tuple = None,
         rotate_scale_factor: float = 1.0

@@ -61,24 +61,6 @@ class ImageNetKaggle(Dataset):
                 x = self.transform(x)
             return x, self.targets[idx]
 
-We can now test it by running a validation epoch for a pre-trained ResNet-50 model.
-
-from torch.utils.data import DataLoader
-from torchvision import transforms
-import torch
-import torchvision
-from tqdm import tqdmmodel = torchvision.models.resnet50(weights="DEFAULT")
-model.eval().cuda()  # Needs CUDA, don't bother on CPUs
-mean = (0.485, 0.456, 0.406)
-std = (0.229, 0.224, 0.225)
-val_transform = transforms.Compose(
-            [
-                transforms.Resize(256),
-                transforms.CenterCrop(224),
-                transforms.ToTensor(),
-                transforms.Normalize(mean, std),
-            ]
-        )
 
 
 def build_model() -> nn.Module:

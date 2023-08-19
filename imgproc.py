@@ -86,7 +86,7 @@ def tensor_to_image(tensor: torch.Tensor, range_norm: bool, half: bool) -> Any:
 
 
 def center_crop(
-        images: ndarray | Tensor | list[ndarray] | list[Tensor],
+        images: ndarray,
         patch_size: int,
 ) -> [ndarray] or [Tensor] or [list[ndarray]] or [list[Tensor]]:
     if not isinstance(images, list):

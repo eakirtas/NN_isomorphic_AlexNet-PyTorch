@@ -22,6 +22,7 @@ import config
 import model
 from dataset import CUDAPrefetcher, ImageDataset
 from utils import load_state_dict, accuracy, Summary, AverageMeter, ProgressMeter
+from torchvision import transform
 import os
 from torch.utils.data import Dataset
 from PIL import Image
@@ -80,6 +81,13 @@ def build_model() -> nn.Module:
 
 
 def load_dataset() -> CUDAPrefetcher:
+    val_transform = transforms.Compose([
+                transforms.Resize(256),
+                transforms.CenterCrop([self.image_size, self.image_size]),
+                transforms.ConvertImageDtype(torch.float),
+               transforms.Normalize([0.<485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            ])
+
     test_dataset = ImageNetKaggle('./data/', "val", val_transform)
     test_dataloader = DataLoader(
             dataset,

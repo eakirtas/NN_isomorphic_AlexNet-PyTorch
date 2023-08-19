@@ -25,7 +25,9 @@ from utils import load_state_dict, accuracy, Summary, AverageMeter, ProgressMete
 import os
 from torch.utils.data import Dataset
 from PIL import Image
-import jsonclass ImageNetKaggle(Dataset):
+import json
+
+class ImageNetKaggle(Dataset):
     def __init__(self, root, split, transform=None):
         self.samples = []
         self.targets = []
@@ -87,7 +89,7 @@ def build_model() -> nn.Module:
 
 
 def load_dataset() -> CUDAPrefetcher:
-    test_dataset = ImageNetKaggle(config.test_image_dir, "val", val_transform)
+    test_dataset = ImageNetKaggle('./data/', "val", val_transform)
     test_dataloader = DataLoader(
             dataset,
             batch_size=64, # may need to reduce this depending on your GPU 

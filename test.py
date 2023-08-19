@@ -27,7 +27,7 @@ import os
 from torch.utils.data import Dataset
 from PIL import Image
 import json
-
+from .nnn.transformation import nn_transformation
 
 
 import os
@@ -78,6 +78,7 @@ def main() -> None:
           f"model weights `{os.path.abspath(config.model_weights_path)}` successfully.")
 
     # Start the verification mode of the model.
+    alexnet_model = nn_transformation(alexnet_model)
     alexnet_model.eval()
 
     # Load test dataloader

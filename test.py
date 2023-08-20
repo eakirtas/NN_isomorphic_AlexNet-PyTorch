@@ -78,7 +78,6 @@ def main() -> None:
           f"model weights `{os.path.abspath(config.model_weights_path)}` successfully.")
 
     # Start the verification mode of the model.
-    alexnet_model = nn_transformation(alexnet_model)
     alexnet_model.eval()
 
     # Load test dataloader

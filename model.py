@@ -22,6 +22,18 @@ __all__ = [
     "alexnet",
 ]
 
+
+class ReLU2(T.nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.bound = 2
+
+    def forward(self, x):
+        return T.clamp_max(T.relu(x), self.bound)
+
+    def __repr__(self):
+        return "ReLU6"
+
 class NNAlexNet(nn.Module):
     def __init__(self):
         super().__init__()
@@ -37,14 +49,14 @@ class NNAlexNet(nn.Module):
             lambda: nn.ReLU(inplace=True),
             lambda: nn.MaxPool2d(kernel_size=3, stride=2),
             None,
-            lambda: nn.ReLU(inplace=True),
+            lambda: ReLU2(),
             lambda: nn.MaxPool2d(kernel_size=3, stride=2),
             None,
-            lambda: nn.ReLU(inplace=True),
+            lambda: ReLU2(),
             None,
-            lambda: nn.ReLU(inplace=True),
+            lambda: ReLU2(),
             None,
-            lambda: nn.ReLU(inplace=True),
+            lambda: ReLU2(),
             lambda: nn.MaxPool2d(kernel_size=3, stride=2),
         ]
         self.avgpool = nn.AdaptiveAvgPool2d((6, 6))
@@ -53,10 +65,10 @@ class NNAlexNet(nn.Module):
         self.classifier_list = [
             lambda: nn.Dropout(p=dropout),
             None,
-            lambda: nn.ReLU(inplace=True),
+            lambda: ReLU2(),
             lambda: nn.Dropout(p=dropout),
             None,
-            lambda: nn.ReLU(inplace=True),
+            lambda: ReLU2(),
             lambda: nn.Linear(4096, num_classes),
         ]
 
@@ -101,7 +113,7 @@ class AlexNet(nn.Module):
             nn.Conv2d(192, 384, kernel_size=3, padding=1),
             nn.ReLU6(inplace=True),
             nn.Conv2d(384, 256, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
+            ReLU2(),
             nn.Conv2d(256, 256, kernel_size=3, padding=1),
             nn.ReLU6(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2),

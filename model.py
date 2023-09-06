@@ -14,8 +14,7 @@
 from typing import Any
 
 import torch as T
-from torch import Tensor
-from torch import nn
+from torch import Tensor, nn
 
 __all__ = [
     "AlexNet",
@@ -34,14 +33,12 @@ class ReLU2(T.nn.Module):
     def __repr__(self):
         return "ReLU6"
 
+
 class NNAlexNet(nn.Module):
     def __init__(self):
         super().__init__()
         self.counter = 0
-        self.lookup = [
-            [ 3, 6, 8, 10],
-            [1, 4, 5]
-        ]
+        self.lookup = [[3, 6, 8, 10], [1, 4, 5]]
 
         self.features = nn.Sequential()
         self.features_list = [
@@ -74,19 +71,18 @@ class NNAlexNet(nn.Module):
 
         self.counter = 0
 
-
     def add_layer(self, layer):
         if self.counter < 5:
             i = len(self.features)
             while self.features_list[i] is not None:
                 self.feature.append(self.feature_list[i]())
-                i+=1
+                i += 1
             self.features[i].append(layer)
         else:
             i = len(self.classifier)
             while self.classifier_list[i] is not None:
                 self.classifier.append(self.feature_list[i]())
-                i+=1
+                i += 1
             self.classifier[i].append(layer)
 
         self.counter += 1
@@ -99,33 +95,35 @@ class NNAlexNet(nn.Module):
         return x
 
 
-
 class AlexNet(nn.Module):
-    def __init__(self, num_classes: int = 1000, dropout: float = 0.5, alpha=None) -> None:
+    def __init__(self,
+                 num_classes: int = 1000,
+                 dropout: float = 0.5,
+                 alpha=None) -> None:
         super().__init__()
         self.features = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=11, stride=4, padding=2),
-            nn.ReLU6(inplace=True),
+            ReLU2(),
             nn.MaxPool2d(kernel_size=3, stride=2),
             nn.Conv2d(64, 192, kernel_size=5, padding=2),
-            nn.ReLU6(inplace=True),
+            ReLU2(),
             nn.MaxPool2d(kernel_size=3, stride=2),
             nn.Conv2d(192, 384, kernel_size=3, padding=1),
-            nn.ReLU6(inplace=True),
+            ReLU2(),
             nn.Conv2d(384, 256, kernel_size=3, padding=1),
             ReLU2(),
             nn.Conv2d(256, 256, kernel_size=3, padding=1),
-            nn.ReLU6(inplace=True),
+            ReLU2(),
             nn.MaxPool2d(kernel_size=3, stride=2),
         )
         self.avgpool = nn.AdaptiveAvgPool2d((6, 6))
         self.classifier = nn.Sequential(
             nn.Dropout(p=dropout),
             nn.Linear(256 * 6 * 6, 4096),
-            nn.ReLU6(inplace=True),
+            ReLU2(),
             nn.Dropout(p=dropout),
             nn.Linear(4096, 4096),
-            nn.ReLU6(inplace=True),
+            ReLU2(),
             nn.Linear(4096, num_classes),
         )
 
@@ -145,8 +143,6 @@ class AlexNet(nn.Module):
         x = T.flatten(x, 1)
         x = self.classifier(x)
         return x
-
-
 
 
 def alexnet(**kwargs: Any) -> AlexNet:
